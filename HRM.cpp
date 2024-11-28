@@ -4,10 +4,6 @@
 	RESTAURANT MANAGEMENT PROJECT 2024
 
     notes:
-	1. In file handling add a owner cost on food which should be 40% of total costs
-	2. Add this code to Git hub
-	3. Add muiz hotel functions and sort them by 29 November
-	4. Add brackets to every loop
 	5. Add a lot of comments
 	6. Add a script so as to not go off track during the presentation
 */
@@ -18,18 +14,28 @@
  #include <conio.h>  // console
  #include <cstdlib>  // for system commands prompt
  #include <fstream>  // for file handling
- void rest();
- void cafe(int*);
- void appetizers(int*);
- void maincourse(int*);
- void beverages(int*);
- void desserts(int*);
- void bill_rest(int*);
- using namespace std;
-
- string name;                                            //for taking name
+ #include <limits>   // for limits in cin looping
 
 
+
+ //RESTAURANT
+void rest();
+void cafe(int*);
+void appetizers(int*);
+void maincourse(int*);
+void beverages(int*);
+void desserts(int*);
+void bill_rest(int*);
+//HOTEL
+void hotel();
+void showcase(int*,int*);
+void roomchoice(int*,int *);
+void checkout(int *,int *);
+
+using namespace std;
+
+string Types[] = {"Single", "Double", "Suite", "Penthouse", "Presidential"};
+string name;
 
 
 int main(){
@@ -39,7 +45,6 @@ b:
 	cout<<"\n\t\t*** Welcome to M&M hotel and restaurant. ***\n";
 
 	char ch;
-
 do{
 
 	cout<<"\n\n\t\t Your good name: "; getline(cin, name);
@@ -55,7 +60,7 @@ do{
 	cin>>choice;
 
 	if(choice==1){//hotel function call
-	    ;
+	    hotel();
 	}
 	else if(choice==2){
 		rest();
@@ -85,35 +90,40 @@ else{
 return 0;
 }
 
- void rest(){	//FUNCTION FOR RESTAURANT MANAGEMENT
+//RESTAURANT (MASHAAL)
 
-	//Welcome note		idea: if time is avaiable then give a perfect seat number, asking about the number of members
+void rest(){	//FUNCTION FOR RESTAURANT MANAGEMENT
+
+	//Welcome note		idea: if time is available then give a perfect seat number, asking about the number of members
 	cout<<"\n\t Welcome to the restaurant.";
 
     char seating;
     int total;
-
 	int i=0;
 	//seating arrangement request
 	do{
         cout<<"\n\t Family = F or Individuals = I \n\nAnswer:\t";
         cin>>seating;
-		switch(seating){
-			case 'f':case 'F':
-				cout<<"\n\t The Seating for Family is on the 2st floor,\n The menu will appear shortly there thank you.";
-				i++;break;
-			case 'i':case 'I':
+		if(seating == 'f' || seating == 'F'){
+        cout<<"\n\t The Seating for Family is on the 2st floor,\n The menu will appear shortly there thank you.";
+		i++;
+		}
+		else if(seating=='i'||seating=='I'){
 				cout<<"\n\t The Seating for Individuals is on the 1st floor,\n The menu will appear shortly there thank you.";
-				i++;break;
-			default:
+				i++;
+		}
+		else{
 				cout<<"\n\t Please enter a valid input.\n\n";
 		}
+		    cin.clear(); // Clears error state
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); //ask sir about this if its allowed
 	}while(i==0);
 
 
 
 	//MENU
 	i=0;
+	cout<<"\n\n\n";
 	while(i==0){//For MENU
 		int choice,subchoice,amount,price;
 		cout<<"\n\t\t MENU";
@@ -369,7 +379,7 @@ return 0;
 }
 
  void bill_rest(int* total){
-    //tax for family 7.5%
+
     //loop for ints in integer is /10
     //int size_name = name.length();
     //int j=1;
@@ -415,3 +425,149 @@ MYFILE<<"__";
 MYFILE<<"\n\n";
 MYFILE.close();
 }
+
+// HOTEL (MUIZ)
+
+void hotel(){   //FUNCTION FOR HOTEL MANAGEMENT
+
+
+
+    int Prices[] = {1200, 2300, 4500, 6000, 10000};
+    int availability[] = {1, 1, 1, 1, 1};    // if available 1 and not available 0
+
+    while (1) {
+            int choice;
+        cout << "\nHotel Management System\n";
+        cout << "1. Show Available rooms\n";
+        cout << "2. Book a room\n";
+        cout << "3. Checkout of a room\n";
+        cout << "4. Exit the System\n";
+        cout << "Enter the service you want to avail: ";
+        cin >> choice;
+
+
+
+        switch (choice) {
+            case 1: showcase(Prices,availability);
+            break;
+
+            case 2:
+                showcase(Prices,availability);
+                roomchoice(Prices,availability);
+            break;                                      // Book a room
+
+            case 3: checkout(Prices,availability);
+            break;
+
+            case 4: return;
+            break;
+
+            default:
+                cout << "Invalid choice! Please enter a valid option.\n";
+        } // switch-case
+    }//loop
+
+
+} //hotel function ended
+
+void showcase(int *prices,int *available){  //FUNCTION FOR AVAILABLE ROOMS
+
+
+    cout << "\nAvailable Rooms: \n";
+
+    int RoomAvailable = 0;
+    for (int i = 0; i <5; i++) {
+    if (*(available + i) == 1) {
+    cout << i + 1 << ". " << Types[i] << " - $" << *(prices + i) << " per night\n";
+    RoomAvailable = 1;
+        }//if statement ended
+    }//for loop end
+    if (!RoomAvailable)
+    cout << "Sorry, No rooms available.\n";
+}
+
+void roomchoice(int* prices,int* available){    //FUNCTION FOR ROOM SELECTION
+    int RoomChoice;
+
+do{
+                cout << "Choose a room between 1-5: ";
+                cin >> RoomChoice;
+                if (RoomChoice < 1 || RoomChoice > 5){
+                    cout << "\n\tEnter a suitable number for the room.\n";
+                }
+                else if (*(available+RoomChoice - 1) == 1) {
+                    cout << "\n\tYou have successfully booked " << Types[RoomChoice - 1] << " room.\n";
+                   *(available+RoomChoice-1) = 0 ; // Marks the room as booked
+                }
+
+                else
+                    cout << "\nSorry, this room is already booked. Choose another room.\n";
+
+}while(RoomChoice < 1 || RoomChoice > 5);
+}//room choice end
+
+void checkout(int *prices,int * available){ // CHECKOUT OF ROOMS / BILL
+                int RoomChoice, Days;
+                 double TotalPrice;
+                 int ID=0;
+do{
+
+                cout << "Choose a room between 1-5 you want to check out from: ";
+                cin >> RoomChoice;
+                if (RoomChoice < 1 || RoomChoice > 5) {
+                    cout << "\n\tEnter a suitable number for the room.\n";
+                }
+                else if (*(available+(RoomChoice - 1))== 0) {
+                    cout << "\n\tYou have successfully checked out from " << Types[RoomChoice - 1] << " room.\n";
+                    cout << "\n\tEnter the number of days you have stayed: ";
+                    cin >> Days;
+
+for(int i=1;i<=35;i++) //for header stars
+cout<<"**";
+                    TotalPrice = *(prices+ (RoomChoice - 1)) * Days;
+                    cout<<"\n\n  BILL TO; ";
+                    cout<<"\n\n\t CUSTOMER NAME: "<<name;
+                    ID++;
+                    cout<<"\n\n\t CUSTOMER ID:   "<<ID+1;
+                    cout<<"\n\n\n\t DAYS STAYED:            "<<Days;
+                    cout<<"\n\n\n\t\t SUB-TOTAL:            "<<TotalPrice;
+                    float tax = TotalPrice*0.075;
+                    cout<<"\n\t\t (+) GST:              "<<tax;
+                    cout<<"\n\t\t (+) SERVICE CHARGES:  "<<500<<"\n\n\n";
+                    for(int i=1;i<=35;i++)
+                    cout<<"-_";
+                    cout<<"\n\n\t\t    TOTAL BILL:        "<<TotalPrice+tax+500<<"\n\n\n";
+
+
+                    *(available+(RoomChoice - 1)) = 1; // Marks the room as available again
+
+for(int i=1;i<=35;i++) //for footer stars
+cout<<"**";
+
+                }
+                else {
+                    cout << "\nSorry, this room is not booked. Choose another room.\n";
+                }
+
+}while(RoomChoice < 1 || RoomChoice > 5);
+
+
+//FILE HANDLING PART
+ofstream MYFILE("DATA OF HOTEL.txt", ios::app); //app for append mode file handling
+MYFILE<<"\t\tCUSTOMER DATA\n\n\n";
+MYFILE<<"\n Customer Name: "<<name;
+MYFILE<<"\n\n Customer ID: : "<<ID;
+MYFILE<< "\n\n ROOM TYPE: "<<Types[RoomChoice - 1];
+MYFILE<<"\n\n\n\n\t TOTAL BILL: "<<TotalPrice;
+MYFILE<<"\n\n\t GST: "<<TotalPrice*0.075;//7.5% tax
+MYFILE<<"\n\n\t YOUR COST: "<<TotalPrice*0.3;
+MYFILE<<"\n\n\t SERVICES: "<<500<<"\n\n";
+for(int i=1;i<=35;i++) //in text file to separate data
+MYFILE<<"**";
+MYFILE<<"\n\n PROFIT: "<<TotalPrice-(TotalPrice*0.3);
+MYFILE<<"\n\n";
+for(int i=1;i<=35;i++) //in text file to separate data
+MYFILE<<"__";
+MYFILE<<"\n\n";
+MYFILE.close();
+} // end of checkout
