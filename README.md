@@ -1,7 +1,6 @@
 Made the code as simple as possible
-i would recommend making a whole folder for this as it would make 2 txt files saving data of customers coming in and out
+I would recommend making a whole folder for this as it would make 2 txt files.
 
 admin password = 2438
 
-
-I hope you all like
+And this project was quite rushed therefore the logic might seem a little but hey then again we build this from the ground up with the bare minimum knowledge :)
